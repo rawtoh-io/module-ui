@@ -1,9 +1,5 @@
 import { Link } from "@tanstack/react-router"
-import {
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from "./ui/sidebar"
+import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "./ui/sidebar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,10 +32,14 @@ export function UserNav({
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.picture} alt={user.name} />
-                <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
+                <AvatarFallback className="rounded-lg">
+                  {initials}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name || "User"}</span>
+                <span className="truncate font-medium">
+                  {user.name || "User"}
+                </span>
                 <span className="truncate text-xs text-muted-foreground">
                   {user.email}
                 </span>
@@ -56,10 +56,14 @@ export function UserNav({
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.picture} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">
+                    {initials}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name || "User"}</span>
+                  <span className="truncate font-medium">
+                    {user.name || "User"}
+                  </span>
                   <span className="truncate text-xs text-muted-foreground">
                     {user.email}
                   </span>

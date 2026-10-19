@@ -23,7 +23,7 @@ import {
 } from "./ui/sidebar"
 import { Separator } from "./ui/separator"
 import { TooltipProvider } from "./ui/tooltip"
-import { useIsMobile } from "../hooks/use-mobile"
+import { useIsPhone } from "../hooks/use-mobile"
 import { cn } from "../lib/utils"
 import { Button } from "./ui/button"
 import {
@@ -81,7 +81,7 @@ export function ModuleShell({
   children,
 }: ModuleShellProps) {
   const org = orgs.find((o) => o.slug === orgSlug)
-  const isMobile = useIsMobile()
+  const isPhone = useIsPhone()
 
   if (!org)
     return <p className="text-muted-foreground p-8">Organization not found.</p>
@@ -104,7 +104,7 @@ export function ModuleShell({
 
   // Phones get the compact page header instead of a sidebar: back arrow, org
   // name, current section, and tabs when the module has several sections.
-  if (isMobile) {
+  if (isPhone) {
     const current = nav.find((item) => item.active)
     return (
       <div className="max-w-4xl mx-auto px-4 py-6">

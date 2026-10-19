@@ -1,8 +1,4 @@
-import {
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from "./ui/sidebar"
+import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "./ui/sidebar"
 import {
   DropdownMenu,
   DropdownMenuContent,
