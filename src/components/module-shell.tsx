@@ -50,6 +50,8 @@ export interface ModuleShellProps {
   onLogout: () => void
   /** Named in the access-denied message, e.g. "Twitch accounts". */
   resource: string
+  /** Shown under the access-denied notice, e.g. a link to what the role may see. */
+  accessDeniedAction?: ReactNode
   /** Extra header content, right-aligned (status, warnings). */
   headerEnd?: ReactNode
   contentClassName?: string
@@ -70,6 +72,7 @@ export function ModuleShell({
   onSelectOrg,
   onLogout,
   resource,
+  accessDeniedAction,
   headerEnd,
   contentClassName = "flex-1 overflow-hidden p-6 flex flex-col",
   children,
@@ -77,7 +80,10 @@ export function ModuleShell({
   const org = orgs.find((o) => o.slug === orgSlug)
   const content =
     org && org.role !== "owner" ? (
-      <AccessDenied role={org.role} orgName={org.name} resource={resource} />
+      <div className="flex flex-col items-start gap-4">
+        <AccessDenied role={org.role} orgName={org.name} resource={resource} />
+        {accessDeniedAction}
+      </div>
     ) : (
       children
     )
