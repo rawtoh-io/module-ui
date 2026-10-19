@@ -1,7 +1,6 @@
 import type { ReactNode } from "react"
 import { Link } from "@tanstack/react-router"
 import type { LucideIcon } from "lucide-react"
-import { ArrowLeftIcon } from "lucide-react"
 import { OrgSwitcher } from "./org-switcher"
 import { UserNav } from "./user-nav"
 import { AccessDenied } from "./access-denied"
@@ -23,9 +22,6 @@ import {
 } from "./ui/sidebar"
 import { Separator } from "./ui/separator"
 import { TooltipProvider } from "./ui/tooltip"
-import { useIsPhone } from "../hooks/use-mobile"
-import { cn } from "../lib/utils"
-import { Button } from "./ui/button"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -54,8 +50,6 @@ export interface ModuleShellProps {
   onLogout: () => void
   /** Named in the access-denied message, e.g. "Twitch accounts". */
   resource: string
-  /** Where the access-denied screen links back to; the module home by default. */
-  backTo?: string
   /** Extra header content, right-aligned (status, warnings). */
   headerEnd?: ReactNode
   contentClassName?: string
@@ -65,7 +59,8 @@ export interface ModuleShellProps {
 /**
  * Admin shell shared by every module site: org switcher, nav, user menu,
  * breadcrumb header. Non-owners keep the shell but get the access-denied
- * notice in place of the page, instead of pages full of 403s.
+ * notice in place of the page, instead of pages full of 403s. On phones the
+ * sidebar becomes a left-hand sheet opened from the header button.
  */
 export function ModuleShell({
   user,
@@ -75,13 +70,11 @@ export function ModuleShell({
   onSelectOrg,
   onLogout,
   resource,
-  backTo = "/",
   headerEnd,
   contentClassName = "flex-1 overflow-hidden p-6 flex flex-col",
   children,
 }: ModuleShellProps) {
   const org = orgs.find((o) => o.slug === orgSlug)
-  const isPhone = useIsPhone()
   const content =
     org && org.role !== "owner" ? (
       <AccessDenied role={org.role} orgName={org.name} resource={resource} />
@@ -91,50 +84,6 @@ export function ModuleShell({
 
   if (!org)
     return <p className="text-muted-foreground p-8">Organization not found.</p>
-
-  // Phones get the compact page header instead of a sidebar: back arrow, org
-  // name, current section, and tabs when the module has several sections.
-  if (isPhone) {
-    const current = nav.find((item) => item.active)
-    return (
-      <div className="max-w-4xl mx-auto px-4 py-6">
-        <div className="flex items-center gap-3 mb-4">
-          <Link to={backTo}>
-            <Button variant="ghost" size="icon">
-              <ArrowLeftIcon className="size-5" />
-            </Button>
-          </Link>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-xl font-bold truncate">{org.name}</h1>
-            {current && (
-              <p className="text-muted-foreground text-sm">{current.label}</p>
-            )}
-          </div>
-        </div>
-        {headerEnd && <div className="flex mb-4">{headerEnd}</div>}
-        {nav.length > 1 && (
-          <nav className="flex gap-1 overflow-x-auto mb-4 -mx-1 px-1">
-            {nav.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={cn(
-                  "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm whitespace-nowrap",
-                  item.active
-                    ? "bg-secondary text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                <item.icon className="size-4" />
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        )}
-        {content}
-      </div>
-    )
-  }
 
   // Sidebar tooltips need a provider; hosts without one at their root still work.
   return (

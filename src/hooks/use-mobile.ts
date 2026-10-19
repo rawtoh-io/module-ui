@@ -1,9 +1,6 @@
 import * as React from "react"
 
 const MOBILE_BREAKPOINT = 768
-// Phones only (Tailwind `sm`); the shell swaps its whole layout below this,
-// so a half-screen desktop window must not count as mobile.
-const PHONE_BREAKPOINT = 640
 
 function useBelow(width: number) {
   const [below, setBelow] = React.useState(
@@ -26,9 +23,4 @@ function useBelow(width: number) {
 /** Sidebar behaviour: off-canvas below 768px. */
 export function useIsMobile() {
   return useBelow(MOBILE_BREAKPOINT)
-}
-
-/** Compact page layout: phones only, below 640px. */
-export function useIsPhone() {
-  return useBelow(PHONE_BREAKPOINT)
 }
