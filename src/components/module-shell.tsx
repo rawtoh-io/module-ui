@@ -63,9 +63,9 @@ export interface ModuleShellProps {
 }
 
 /**
- * Owner-only admin shell shared by every module site: org switcher, nav,
- * user menu, breadcrumb header. Non-owners get the access-denied notice
- * instead of pages full of 403s.
+ * Admin shell shared by every module site: org switcher, nav, user menu,
+ * breadcrumb header. Non-owners keep the shell but get the access-denied
+ * notice in place of the page, instead of pages full of 403s.
  */
 export function ModuleShell({
   user,
@@ -82,25 +82,15 @@ export function ModuleShell({
 }: ModuleShellProps) {
   const org = orgs.find((o) => o.slug === orgSlug)
   const isPhone = useIsPhone()
+  const content =
+    org && org.role !== "owner" ? (
+      <AccessDenied role={org.role} orgName={org.name} resource={resource} />
+    ) : (
+      children
+    )
 
   if (!org)
     return <p className="text-muted-foreground p-8">Organization not found.</p>
-
-  if (org.role !== "owner") {
-    return (
-      <div className="max-w-xl mx-auto px-8 py-8">
-        <div className="flex items-center gap-3 mb-6">
-          <Link to={backTo}>
-            <Button variant="ghost" size="icon">
-              <ArrowLeftIcon className="size-5" />
-            </Button>
-          </Link>
-          <h1 className="text-2xl font-bold">{org.name}</h1>
-        </div>
-        <AccessDenied role={org.role} orgName={org.name} resource={resource} />
-      </div>
-    )
-  }
 
   // Phones get the compact page header instead of a sidebar: back arrow, org
   // name, current section, and tabs when the module has several sections.
@@ -141,7 +131,7 @@ export function ModuleShell({
             ))}
           </nav>
         )}
-        {children}
+        {content}
       </div>
     )
   }
@@ -152,11 +142,7 @@ export function ModuleShell({
       <SidebarProvider>
         <Sidebar collapsible="icon">
           <SidebarHeader>
-            <OrgSwitcher
-              orgs={orgs.filter((o) => o.role === "owner")}
-              currentOrg={org}
-              onSelect={onSelectOrg}
-            />
+            <OrgSwitcher orgs={orgs} currentOrg={org} onSelect={onSelectOrg} />
           </SidebarHeader>
           <SidebarContent>
             <SidebarGroup>
@@ -205,7 +191,7 @@ export function ModuleShell({
             </Breadcrumb>
             {headerEnd}
           </header>
-          <div className={contentClassName}>{children}</div>
+          <div className={contentClassName}>{content}</div>
         </SidebarInset>
       </SidebarProvider>
     </TooltipProvider>
