@@ -52,6 +52,8 @@ export interface ModuleShellProps {
   onLogout: () => void
   /** Named in the access-denied message, e.g. "Twitch accounts". */
   resource: string
+  /** Where the access-denied screen links back to; the module home by default. */
+  backTo?: string
   /** Extra header content, right-aligned (status, warnings). */
   headerEnd?: ReactNode
   contentClassName?: string
@@ -71,6 +73,7 @@ export function ModuleShell({
   onSelectOrg,
   onLogout,
   resource,
+  backTo = "/",
   headerEnd,
   contentClassName = "flex-1 overflow-hidden p-6 flex flex-col",
   children,
@@ -84,7 +87,7 @@ export function ModuleShell({
     return (
       <div className="max-w-xl mx-auto px-8 py-8">
         <div className="flex items-center gap-3 mb-6">
-          <Link to="/">
+          <Link to={backTo}>
             <Button variant="ghost" size="icon">
               <ArrowLeftIcon className="size-5" />
             </Button>
