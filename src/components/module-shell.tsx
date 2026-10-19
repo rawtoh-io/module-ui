@@ -23,6 +23,8 @@ import {
 } from "./ui/sidebar"
 import { Separator } from "./ui/separator"
 import { TooltipProvider } from "./ui/tooltip"
+import { useIsMobile } from "../hooks/use-mobile"
+import { cn } from "../lib/utils"
 import { Button } from "./ui/button"
 import {
   Breadcrumb,
@@ -79,6 +81,7 @@ export function ModuleShell({
   children,
 }: ModuleShellProps) {
   const org = orgs.find((o) => o.slug === orgSlug)
+  const isMobile = useIsMobile()
 
   if (!org)
     return <p className="text-muted-foreground p-8">Organization not found.</p>
@@ -95,6 +98,50 @@ export function ModuleShell({
           <h1 className="text-2xl font-bold">{org.name}</h1>
         </div>
         <AccessDenied role={org.role} orgName={org.name} resource={resource} />
+      </div>
+    )
+  }
+
+  // Phones get the compact page header instead of a sidebar: back arrow, org
+  // name, current section, and tabs when the module has several sections.
+  if (isMobile) {
+    const current = nav.find((item) => item.active)
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-6">
+        <div className="flex items-center gap-3 mb-4">
+          <Link to={backTo}>
+            <Button variant="ghost" size="icon">
+              <ArrowLeftIcon className="size-5" />
+            </Button>
+          </Link>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-xl font-bold truncate">{org.name}</h1>
+            {current && (
+              <p className="text-muted-foreground text-sm">{current.label}</p>
+            )}
+          </div>
+        </div>
+        {headerEnd && <div className="flex mb-4">{headerEnd}</div>}
+        {nav.length > 1 && (
+          <nav className="flex gap-1 overflow-x-auto mb-4 -mx-1 px-1">
+            {nav.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={cn(
+                  "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm whitespace-nowrap",
+                  item.active
+                    ? "bg-secondary text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                <item.icon className="size-4" />
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        )}
+        {children}
       </div>
     )
   }
