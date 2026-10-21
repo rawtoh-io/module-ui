@@ -74,10 +74,11 @@ export function ModuleShell({
   resource,
   accessDeniedAction,
   headerEnd,
-  contentClassName = "flex-1 overflow-hidden p-6 flex flex-col",
+  contentClassName = "flex flex-1 flex-col gap-4 overflow-auto p-4 pt-0",
   children,
 }: ModuleShellProps) {
   const org = orgs.find((o) => o.slug === orgSlug)
+  const page = nav.find((item) => item.active)?.label
   const content =
     org && org.role !== "owner" ? (
       <div className="flex flex-col items-start gap-4">
@@ -128,23 +129,29 @@ export function ModuleShell({
           <SidebarRail />
         </Sidebar>
         <SidebarInset className="overflow-hidden">
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Link to="/">Home</Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{org.name}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-            {headerEnd}
+          <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+            <div className="flex flex-1 items-center gap-2 px-4">
+              <SidebarTrigger className="-ml-1" />
+              <Separator orientation="vertical" className="mr-2" />
+              <Breadcrumb>
+                <BreadcrumbList>
+                  {page && (
+                    <>
+                      <BreadcrumbItem className="hidden md:block">
+                        <BreadcrumbLink asChild>
+                          <Link to={`/o/${org.slug}`}>{org.name}</Link>
+                        </BreadcrumbLink>
+                      </BreadcrumbItem>
+                      <BreadcrumbSeparator className="hidden md:block" />
+                    </>
+                  )}
+                  <BreadcrumbItem>
+                    <BreadcrumbPage>{page ?? org.name}</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+              {headerEnd}
+            </div>
           </header>
           <div className={contentClassName}>{content}</div>
         </SidebarInset>
