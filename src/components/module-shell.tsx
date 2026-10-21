@@ -138,8 +138,8 @@ export function ModuleShell({
                   {page && (
                     <>
                       <BreadcrumbItem className="hidden md:block">
-                        <BreadcrumbLink asChild>
-                          <Link to={`/o/${org.slug}`}>{org.name}</Link>
+                        <BreadcrumbLink href={`/o/${org.slug}`}>
+                          {org.name}
                         </BreadcrumbLink>
                       </BreadcrumbItem>
                       <BreadcrumbSeparator className="hidden md:block" />
