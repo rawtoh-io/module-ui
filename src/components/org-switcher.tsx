@@ -37,11 +37,9 @@ export function OrgSwitcher({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar shape="square">
                 <AvatarImage src={currentOrg.logo} alt={currentOrg.name} />
-                <AvatarFallback className="rounded-lg">
-                  {orgInitials(currentOrg.name)}
-                </AvatarFallback>
+                <AvatarFallback>{orgInitials(currentOrg.name)}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{currentOrg.name}</span>
@@ -66,11 +64,9 @@ export function OrgSwitcher({
                 onClick={() => onSelect(org)}
                 className="gap-2 p-2"
               >
-                <Avatar className="h-6 w-6 rounded-md" size="sm">
+                <Avatar size="sm" shape="square">
                   <AvatarImage src={org.logo} alt={org.name} />
-                  <AvatarFallback className="rounded-md text-[0.6rem]">
-                    {orgInitials(org.name)}
-                  </AvatarFallback>
+                  <AvatarFallback>{orgInitials(org.name)}</AvatarFallback>
                 </Avatar>
                 {org.name}
               </DropdownMenuItem>
