@@ -1,6 +1,6 @@
 {
   "name": "@rawtoh/module-ui",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Shared admin shell and UI primitives for Rawtoh module web apps (React, Tailwind 4, shadcn)",
   "type": "module",
   "exports": {
